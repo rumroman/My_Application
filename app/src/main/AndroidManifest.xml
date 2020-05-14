@@ -9,6 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".composition.JenreComposition"
+            android:parentActivityName=".Composition"/>
+
+        <activity android:name=".composition.AuthorComposition"
+            android:parentActivityName=".Composition"/>
+
+        <activity android:name=".composition.PopComposition"
+            android:parentActivityName=".Composition"/>
+
+        <activity android:name=".composition.FavoriteComposition"
+            android:parentActivityName=".Composition"/>
+
         <activity android:name=".Search" />
         <activity android:name=".Order" />
         <activity android:name=".Profile" />

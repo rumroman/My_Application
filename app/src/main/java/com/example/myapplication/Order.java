@@ -1,24 +1,19 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Order extends AppCompatActivity {
 
     ListView listView;
-    String mTitle[] = {"One", "Two", "Three", "For", "Five"};
-    String mDescription[] = {"One", "Two", "Three", "For", "Five"};
+    String compositionNames[] = {"One", "Two", "Three", "For", "Five"};
+    String authorNames[] = {"One", "Two", "Three", "For", "Five"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +22,10 @@ public class Order extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
 
-        MyAdapter adapter = new MyAdapter(this, mTitle, mDescription);
+        LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        CompositionAdapter adapter = new CompositionAdapter(this, compositionNames, authorNames, layoutInflater);
+
         listView.setAdapter(adapter);
-
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -41,34 +36,5 @@ public class Order extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    class MyAdapter extends ArrayAdapter<String> {
-
-        Context context;
-        String[] rTitle;
-        String[] rDescription;
-
-        MyAdapter(Context context, String[] title, String[] description) {
-            super(context, R.layout.row, R.id.textView1, title);
-            this.context = context;
-            this.rTitle = title;
-            this.rDescription = description;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.row, parent, false);
-            TextView myTitle = row.findViewById(R.id.textView1);
-            TextView myDescription = row.findViewById(R.id.textView2);
-
-            myTitle.setText(rTitle[position]);
-            myDescription.setText(rDescription[position]);
-
-            return row;
-        }
     }
 }
