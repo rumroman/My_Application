@@ -2,11 +2,14 @@ package com.example.myapplication.model;
 
 public class CompositionInfo {
 
+    private int compositionId;
+
     private String compositionName;
 
     private String authorName;
 
-    public CompositionInfo(String compositionName, String authorName) {
+    public CompositionInfo(int compositionId, String compositionName, String authorName) {
+        this.compositionId = compositionId;
         this.compositionName = compositionName;
         this.authorName = authorName;
     }
@@ -25,5 +28,13 @@ public class CompositionInfo {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public int getCompositionId() {
+        return compositionId;
+    }
+
+    public void setCompositionId(int compositionId) {
+        this.compositionId = compositionId;
     }
 }

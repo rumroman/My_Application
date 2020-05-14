@@ -8,20 +8,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.example.myapplication.Composition;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.ILoadMore;
-import com.example.myapplication.adapter.MyAdapter;
+import com.example.myapplication.adapter.FavoriteCompositionAdapter;
 import com.example.myapplication.model.CompositionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FavoriteComposition extends AppCompatActivity {
+public class FavoriteComposition extends AppCompatActivity  {
 
     List<CompositionInfo> items = new ArrayList<>();
-    MyAdapter adapter;
+    FavoriteCompositionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class FavoriteComposition extends AppCompatActivity {
         RecyclerView recycler = (RecyclerView)findViewById(R.id.recycler);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(recycler, this, items);
+        adapter = new FavoriteCompositionAdapter(recycler, this, items);
         recycler.setAdapter(adapter);
 
         // Set Load more event
@@ -56,7 +55,8 @@ public class FavoriteComposition extends AppCompatActivity {
                             int end = index+10;
                             for (int i=index; i<end; i++){
                                 String name = UUID.randomUUID().toString();
-                                CompositionInfo compositionInfo = new CompositionInfo(name, name.length() +"");
+                                CompositionInfo compositionInfo = new CompositionInfo(compositionId, name, name.length() +"");
+                                items.add(compositionInfo);
                             }
                             adapter.notifyDataSetChanged();
                             adapter.setLoaded();
@@ -69,8 +69,6 @@ public class FavoriteComposition extends AppCompatActivity {
             }
         });
 
-        recycler.addOnItemTouchListener();
-
 
     }
 
@@ -78,8 +76,9 @@ public class FavoriteComposition extends AppCompatActivity {
         // Random data
         for (int i = 0; i< 10; i++) {
             String name  = UUID.randomUUID().toString();
-            CompositionInfo compositionInfo = new CompositionInfo(name, name.length() + "");
+            CompositionInfo compositionInfo = new CompositionInfo(compositionId, name, name.length() + "");
             items.add(compositionInfo);
         }
     }
+
 }
