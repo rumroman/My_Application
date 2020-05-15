@@ -26,6 +26,10 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         mySearchView = findViewById(R.id.searchView);
         listView = findViewById(R.id.myList);
 

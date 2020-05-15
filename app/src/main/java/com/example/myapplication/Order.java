@@ -20,6 +20,10 @@ public class Order extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         listView = findViewById(R.id.listView);
 
         LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

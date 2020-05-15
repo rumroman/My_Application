@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,7 +38,7 @@ public class FavoriteCompositionAdapter extends RecyclerView.Adapter<RecyclerVie
     // Список композиций
     private List<CompositionInfo> items;
 
-    private int visibleThreshold = 5;
+    private int visibleThreshold = 20;
 
     private int lastVisibleItemPosition, totalItemCount;
 
@@ -58,13 +58,15 @@ public class FavoriteCompositionAdapter extends RecyclerView.Adapter<RecyclerVie
                 totalItemCount = linearLayoutManager != null ? linearLayoutManager.getItemCount() : 0;
                 // позиция в списке последнего  видимого элемента в списке
                 lastVisibleItemPosition = linearLayoutManager != null ? linearLayoutManager.findLastVisibleItemPosition() : 0;
-                // если не загрузки и количество элементов меньше позиции последнего видимого элемента + 5 (what?)
+                System.out.println("lastVisible: " + lastVisibleItemPosition);
+                // если нет загрузки и количество элементов меньше позиции последнего видимого элемента + 5 (what?)
                 // @todo +visibleThreshold под вопросом
-                if (!isLoading && totalItemCount <= lastVisibleItemPosition + visibleThreshold) {
+                if (!isLoading && (totalItemCount <= lastVisibleItemPosition + visibleThreshold)) {
 
                     if (loadMore != null) {
                         loadMore.onLoadMore();
                     }
+                    System.out.println("LOADING");
                     isLoading = true;
                 }
             }
@@ -139,6 +141,7 @@ public class FavoriteCompositionAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void setLoaded() {
+        System.out.println("STOP LOAD");
         isLoading = false;
     }
 
@@ -159,7 +162,7 @@ public class FavoriteCompositionAdapter extends RecyclerView.Adapter<RecyclerVie
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView compositionName, authorName;
-        Button btnMore;
+        ImageButton btnMore;
 
         ItemViewHolder(@NonNull View itemView) {
             super(itemView);

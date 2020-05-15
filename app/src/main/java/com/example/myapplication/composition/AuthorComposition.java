@@ -12,5 +12,9 @@ public class AuthorComposition extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_author_composition);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Исполнители");
+        }
     }
 }

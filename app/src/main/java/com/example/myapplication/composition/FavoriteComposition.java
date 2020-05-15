@@ -5,17 +5,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.ILoadMore;
 import com.example.myapplication.adapter.FavoriteCompositionAdapter;
 import com.example.myapplication.model.CompositionInfo;
+import com.example.myapplication.network.NetworkService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FavoriteComposition extends AppCompatActivity  {
 
@@ -27,56 +31,100 @@ public class FavoriteComposition extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_composition);
 
-        // Random data
-        random10Data();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Избранное");
+        }
 
-        RecyclerView recycler = (RecyclerView)findViewById(R.id.recycler);
+
+        RecyclerView recycler = (RecyclerView)findViewById(R.id.favoriteRecycler);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FavoriteCompositionAdapter(recycler, this, items);
         recycler.setAdapter(adapter);
 
-        // Set Load more event
-        adapter.setLoadMore(new ILoadMore() {
-            @Override
-            public void onLoadMore() {
-                if (items.size() <= 20) {
-                    items.add(null);
-                    adapter.notifyItemInserted(items.size()-1);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            items.remove(items.size() -1);
-                            adapter.notifyItemRemoved(items.size());
+//        NetworkService.getInstance()
+//                .getJSONApi()
+//                .getCompositions()
+//                .enqueue(new Callback<List<CompositionInfo>>() {
+//                    @Override
+//                    public void onResponse(Call<List<CompositionInfo>> call, Response<List<CompositionInfo>> response) {
+//
+//                        List<CompositionInfo> compositions = response.body() != null ? response.body() : Collections.emptyList();
+//                        items.addAll(compositions);
+//                        System.out.println("items: " + items.toString());
+//                        System.out.println("Дерг");
+//                        recycler.setAdapter(adapter);
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<CompositionInfo>> call, Throwable t) {
+//                        System.out.println("FAILURE");
+//                    }
+//                });
 
-                            // Random more data
+        adapter.setLoadMore(() -> {
+            if (items.size() <= 100) {
+               // items.add(null);
+                //adapter.notifyItemInserted(items.size()-1);
+                NetworkService.getInstance()
+                        .getJSONApi()
+                        .getCompositions()
+                        .enqueue(new Callback<List<CompositionInfo>>() {
+                            @Override
+                            public void onResponse(Call<List<CompositionInfo>> call, Response<List<CompositionInfo>> response) {
 
-                            int index = items.size();
-                            int end = index+10;
-                            for (int i=index; i<end; i++){
-                                String name = UUID.randomUUID().toString();
-                                CompositionInfo compositionInfo = new CompositionInfo(compositionId, name, name.length() +"");
-                                items.add(compositionInfo);
+
+//                                items.remove(items.size() -1);
+//                                adapter.notifyItemRemoved(items.size());
+
+
+
+
+                                List<CompositionInfo> compositions = response.body() != null ? response.body() : Collections.emptyList();
+
+                                for(CompositionInfo compositionInfo : compositions) {
+                                    items.add(compositionInfo);
+                                    adapter.notifyItemInserted(items.size() -1);
+                                }
+
+                                System.out.println("items: " + items.toString());
+                                System.out.println("Дерг");
+
+                                adapter.notifyDataSetChanged();
+                                adapter.setLoaded();
                             }
-                            adapter.notifyDataSetChanged();
-                            adapter.setLoaded();
 
-                        }
-                    }, 5000); // Time to load
-                } else {
-                    Toast.makeText(FavoriteComposition.this, "Load data completed !", Toast.LENGTH_SHORT).show();
-                }
+                            @Override
+                            public void onFailure(Call<List<CompositionInfo>> call, Throwable t) {
+                                System.out.println("FAILURE");
+                            }
+                        });
+            } else {
+                Toast.makeText(FavoriteComposition.this, "Load data completed !", Toast.LENGTH_SHORT).show();
             }
         });
+
+//        if (items.isEmpty()) {
+//            System.out.println("items is empty");
+//        }
+//        recycler.setAdapter(adapter);
+        random5Data();
+        items.add(new CompositionInfo(1, "Composition", "author"));
+
+
+
+        // Set Load more event
+
 
 
     }
 
-    private void random10Data() {
+    private void random5Data() {
         // Random data
-        for (int i = 0; i< 10; i++) {
+        for (int i = 0; i< 5; i++) {
             String name  = UUID.randomUUID().toString();
-            CompositionInfo compositionInfo = new CompositionInfo(compositionId, name, name.length() + "");
+            CompositionInfo compositionInfo = new CompositionInfo(0, name, name.length() + "");
             items.add(compositionInfo);
         }
     }
